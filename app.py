@@ -476,17 +476,35 @@ with tab_geo:
     color_scale = SEQUENTIAL_BLUES if map_metric == "Rainfall" else SEQUENTIAL_ORANGES
 
     # Chart 17: Geographic map of stations
-    fig = px.scatter_mapbox(
-        station_agg, lat="latitude", lon="longitude", color=color_col, size="records",
-        hover_name="station_name", hover_data={"state_full": True, "avg_rainfall": ":.1f", "avg_temp": ":.1f"},
-        color_continuous_scale=color_scale, zoom=3.6, height=560,
-        title=f"Weather Stations Coloured by Avg. {map_metric}",
-        template=PLOTLY_TEMPLATE,
-    )
-    fig.update_layout(mapbox_style="carto-positron", margin=dict(l=0, r=0, t=40, b=0))
-    st.plotly_chart(fig, use_container_width=True)
-    insight("Marker size reflects the number of daily records for that station in the current filter selection.")
+    fig = px.scatter_map(
+    station_agg,
+    lat="latitude",
+    lon="longitude",
+    color=color_col,
+    size="records",
+    hover_name="station_name",
+    hover_data={
+        "state_full": True,
+        "avg_rainfall": ":.1f",
+        "avg_temp": ":.1f"
+    },
+    color_continuous_scale=color_scale,
+    zoom=3.6,
+    height=560,
+    title=f"Weather Stations Coloured by Avg. {map_metric}",
+    template=PLOTLY_TEMPLATE
+)
 
+fig.update_layout(
+    map_style="carto-positron",
+    margin=dict(l=0, r=0, t=40, b=0)
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+insight(
+    "Marker size reflects the number of daily records for that station in the current filter selection."
+)
 # ═══════════════════════════════════════════════════════════════════════
 # TAB 5 — EXTREMES & RAW DATA
 # ═══════════════════════════════════════════════════════════════════════
